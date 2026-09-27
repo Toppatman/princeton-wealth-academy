@@ -1,0 +1,27 @@
+Matthew — Princeton Wealth Academy Website Setup
+
+I’d like you to help me build the Princeton Wealth Academy website.
+
+For the first step, please:
+
+1. Set up a Squarespace website for Princeton Wealth Academy.
+
+2. Choose a clean, sophisticated professional template. Think wealth education / Princeton / modern professional, not a typical insurance-sales website.
+
+3. Create these pages:
+Home
+About Princeton Wealth Academy
+What We Teach
+Programs & Workshops
+About Us
+Contact / Schedule
+
+4. Set up the basic navigation and mobile layout.
+
+5. Put placeholders on the pages for now. Don’t write the content yourself — I’ll provide it.
+
+6. Set up a basic Contact/Schedule section, but don’t connect any complicated CRM yet.
+
+7. Do NOT change the DNS, Google Workspace/email settings, or connect http://PrincetonWealthAcademy.com yet. We will do that after the site is ready.
+
+8. Send me the Squarespace preview link when the basic structure is finished.
