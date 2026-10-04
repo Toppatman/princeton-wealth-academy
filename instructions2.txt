@@ -1,0 +1,272 @@
+Princeton Wealth Academy Website
+
+Step-by-Step Build Protocol
+RULE #1
+Do not try to build the entire website at once.
+Complete one phase, show Mom the result, get approval, and then move to the next phase.
+
+
+⸻
+
+
+PHASE 1 — Build the Basic Website Structure
+Create these main menu items:
+Home
+About Us
+Education
+Insights
+Events
+Resources
+Contact
+For now, these pages can be mostly empty.
+The goal of Phase 1 is simply to make sure the website structure and navigation work properly on both desktop and mobile.
+About Us
+Under About Us, prepare space for:
+Our Mission
+Our Founder
+Our Team
+Create a separate page for:
+Sharon R. Deng, MBA
+This page should have its own permanent URL.
+Example structure:
+/about/sharon-deng
+Do not worry about writing the biography yet. We will provide the content later.
+Phase 1 Deliverable
+Show Mom:
+desktop homepage
+mobile homepage
+main navigation
+About Us page
+Sharon’s individual profile page
+STOP HERE FOR REVIEW.
+
+
+⸻
+
+
+PHASE 2 — Build the Education Section
+Create an Education landing page.
+Prepare the website so that educational topics can eventually be organized into categories.
+Initial categories:
+Retirement
+Investments & Asset Allocation
+Tax Education
+Insurance & Risk Management
+Long-Term Care
+Estate & Legacy Planning
+College Funding
+Do not write articles yet.
+We only need the category structure.
+The categories may change before launch.
+Phase 2 Deliverable
+Show Mom:
+Education page
+category layout
+what an individual category page will look like
+STOP HERE FOR REVIEW.
+
+
+⸻
+
+
+PHASE 3 — Build the Insights / Article System
+We need to be able to publish articles easily without redesigning the website every time.
+Create one sample article.
+Every article should automatically have:
+Article Title
+Author: Sharon R. Deng, MBA
+Published: [date]
+Last Updated: [date]
+Article content
+Sources / References
+Related Articles
+The author’s name should be clickable and lead to Sharon’s profile page.
+Every article must have its own URL.
+Example:
+/insights/retirement/retirement-income-planning
+Important
+Do not manually build a completely new webpage every time we publish an article.
+Create a reusable article template.
+Phase 3 Deliverable
+Publish ONE test article using dummy text so we can test the system.
+STOP HERE FOR REVIEW.
+
+
+⸻
+
+
+PHASE 4 — Prepare English + Chinese Capability
+The website should eventually support both English and Chinese.
+Do NOT put the full English article and Chinese article together on one long webpage.
+Prepare separate URLs.
+Example:
+English:
+/insights/retirement/retirement-income-planning
+Chinese:
+/zh/insights/retirement/retirement-income-planning
+Add:
+English | 中文
+near the top of the page when both versions exist.
+We do not need to translate the whole website yet.
+For now, simply make sure the website architecture can support this later.
+Phase 4 Deliverable
+Create one English test page and one Chinese test page and show how users switch between them.
+STOP HERE FOR REVIEW.
+
+
+⸻
+
+
+PHASE 5 — Build Events
+Create an Events page.
+Each major workshop or educational event should be able to have its own page.
+Create one sample event page containing:
+Event Title
+Date
+Location or Online
+Presented by
+Hosted by / In collaboration with
+Short Description
+What You Will Learn
+Related Resources
+After an event, we should be able to add:
+photos
+video
+recap
+presentation resources
+related articles
+Phase 5 Deliverable
+Create ONE sample event.
+STOP HERE FOR REVIEW.
+
+
+⸻
+
+
+PHASE 6 — Resources
+Create a Resources page.
+Prepare sections for future materials such as:
+Guides
+Checklists
+FAQs
+Videos
+Workshop Materials
+We do not need to fill these sections yet.
+The important thing is that resources can be added later without redesigning the website.
+STOP HERE FOR REVIEW.
+
+
+⸻
+
+
+PHASE 7 — Basic Search Setup
+Once the website structure works, complete the basic technical setup.
+Make sure the site has:
+HTTPS
+robots.txt
+XML sitemap
+Google indexing capability
+Bing indexing capability
+OAI-SearchBot access
+clean URLs
+unique page titles
+meta descriptions
+canonical URLs
+proper H1, H2 and H3 headings
+mobile-friendly pages
+fast loading
+alt text capability for images
+Important text should be actual HTML text, not text embedded inside images.
+Phase 7 Deliverable
+Give Mom the URLs for:
+robots.txt
+XML sitemap
+Google Search Console
+Bing Webmaster Tools
+STOP HERE FOR REVIEW.
+
+
+⸻
+
+
+PHASE 8 — Structured Data
+Do this AFTER the basic website is working.
+Add structured data for:
+Princeton Wealth Academy
+Use Organization structured data.
+Sharon R. Deng
+Use Person structured data.
+Educational Articles
+Use Article structured data.
+Workshops
+Use Event structured data when appropriate.
+Do not invent information to fill structured-data fields.
+Only use information actually published on the website.
+Phase 8 Deliverable
+Test several pages with Google’s structured-data testing tools and show Mom the results.
+STOP HERE FOR REVIEW.
+
+
+⸻
+
+
+PHASE 9 — Content Upload
+Only after the website structure is approved will we begin adding real content.
+Mom/ChatGPT will provide:
+Sharon’s biography
+Princeton Wealth Academy description
+educational articles
+Chinese versions
+FAQs
+workshop descriptions
+resource materials
+Matthew’s job is NOT to become a financial-content writer.
+Matthew’s job is to make sure the content is:
+displayed correctly
+easy to read
+searchable
+mobile friendly
+internally linked
+technically organized correctly
+
+
+⸻
+
+
+PHASE 10 — Final Pre-Launch Check
+Before launch, check:
+Desktop ✓
+iPhone ✓
+iPad ✓
+Navigation ✓
+All links ✓
+Contact form ✓
+English/Chinese switching ✓
+Page titles ✓
+Meta descriptions ✓
+Sitemap ✓
+robots.txt ✓
+Structured data ✓
+Google indexing setup ✓
+Bing indexing setup ✓
+OAI-SearchBot allowed ✓
+Website speed ✓
+Security/HTTPS ✓
+404 page ✓
+Privacy Policy ✓
+Disclosures/Compliance pages ✓
+
+
+⸻
+
+
+VERY IMPORTANT
+Do not spend hours solving something you are unsure about.
+If you run into a technical question, send Mom:
+What you are trying to do
+What technology/framework you are using
+Screenshot of the problem
+Relevant code if applicable
+What you already tried
+Mom will ask ChatGPT and send you the next instruction.
+Build this website one step at a time.
