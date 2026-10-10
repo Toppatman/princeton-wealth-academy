@@ -1,0 +1,27 @@
+{
+  "name": "princeton-wealth-academy",
+  "version": "1.0.0",
+  "description": "Princeton Wealth Academy Website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Toppatman/princeton-wealth-academy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Toppatman/princeton-wealth-academy/issues"
+  },
+  "homepage": "https://github.com/Toppatman/princeton-wealth-academy#readme",
+  "dependencies": {
+    "astro": "^7.3.8"
+  }
+}

@@ -1,0 +1,40 @@
+---
+const menuItems = [
+  { label: 'Home', href: '/' },
+  { label: 'About Us', href: '/about/' },
+  { label: 'Education', href: '/education/' },
+  { label: 'Insights', href: '/insights/' },
+  { label: 'Events', href: '/events/' },
+  { label: 'Resources', href: '/resources/' },
+  { label: 'Contact', href: '/contact/' },
+];
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+---
+
+<header class="site-header">
+  <div class="brand"><a href="/">Princeton Wealth Academy</a></div>
+  <nav aria-label="Main navigation">
+    <ul class="nav-links">
+      {menuItems.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            aria-current={(item.href.replace(/\/+$/, '') || '/') === currentPath ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-header { padding: 1rem 1.25rem; border-bottom: 1px solid #d9dfe5; }
+  .brand { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .brand a { color: inherit; text-decoration: none; }
+  .nav-links { display: flex; flex-wrap: wrap; gap: 0.45rem 1.25rem; margin: 0; padding: 0; list-style: none; }
+  .nav-links a { color: inherit; text-decoration: none; }
+  .nav-links a:hover, .nav-links a[aria-current="page"] { text-decoration: underline; text-underline-offset: 0.3em; }
+  .nav-links a:focus-visible, .brand a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+</style>
