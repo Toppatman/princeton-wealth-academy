@@ -1,0 +1,55 @@
+
+---
+import Layout from "../../layouts/Layout.astro";
+
+import {
+  educationCategories,
+  type EducationCategory,
+} from "../../data/educationCategories";
+
+export function getStaticPaths() {
+  return educationCategories.map((category) => ({
+    params: {
+      category: category.slug,
+    },
+    props: {
+      categoryData: category,
+    },
+  }));
+}
+
+const { categoryData } = Astro.props as {
+  categoryData: EducationCategory;
+};
+---
+
+<Layout title={`${categoryData.title} | Princeton Wealth Academy`}>
+  <section class="category-page">
+    <div class="education-container">
+
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/education/">Education</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{categoryData.title}</span>
+      </nav>
+
+      <p class="eyebrow">Education Topic</p>
+
+      <h1>{categoryData.title}</h1>
+
+      <p class="category-page__intro">
+        {categoryData.description}
+      </p>
+
+      <div class="category-page__note">
+        <h2>Educational Resources</h2>
+
+        <p>
+          Resources covering this topic will be added
+          in a future phase.
+        </p>
+      </div>
+
+    </div>
+  </section>
+</Layout>

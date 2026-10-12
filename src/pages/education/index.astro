@@ -1,8 +1,36 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import Layout from "../../layouts/BaseLayout.astro";
+import CategoryCard from "../../components/CategoryCard.astro";
+import { educationCategories } from "../../data/educationCategories";
 ---
 
-<BaseLayout title="Education">
-  <h1>Education</h1>
-  <p>Educational topics and categories will be added in Phase 2.</p>
-</BaseLayout>
+<Layout title="Education | Princeton Wealth Academy">
+  <section class="education-hero">
+    <div class="education-container">
+      <p class="eyebrow">Financial Education</p>
+
+      <h1>Explore Financial Education</h1>
+
+      <p class="hero-description">
+        Build your understanding of important financial topics
+        through clear, accessible educational resources.
+      </p>
+    </div>
+  </section>
+
+  <section class="education-section">
+    <div class="education-container">
+      <h2>Explore by Topic</h2>
+
+      <p class="section-description">
+        Choose a category to begin exploring.
+      </p>
+
+      <div class="education-grid">
+        {educationCategories.map((category) => (
+          <CategoryCard category={category} />
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
