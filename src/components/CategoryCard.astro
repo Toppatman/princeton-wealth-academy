@@ -1,55 +1,58 @@
-
 ---
-import Layout from "../../layouts/Layout.astro";
+import type { EducationCategory } from "../data/educationCategories";
 
-import {
-  educationCategories,
-  type EducationCategory,
-} from "../../data/educationCategories";
-
-export function getStaticPaths() {
-  return educationCategories.map((category) => ({
-    params: {
-      category: category.slug,
-    },
-    props: {
-      categoryData: category,
-    },
-  }));
+interface Props {
+  category: EducationCategory;
 }
 
-const { categoryData } = Astro.props as {
-  categoryData: EducationCategory;
-};
+const { category } = Astro.props;
 ---
 
-<Layout title={`${categoryData.title} | Princeton Wealth Academy`}>
-  <section class="category-page">
-    <div class="education-container">
+<a class="category-card" href={`/education/${category.slug}/`}>
+  <div class="category-card__content">
+    <h3>{category.title}</h3>
+    <p>{category.description}</p>
+  </div>
 
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/education/">Education</a>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">{categoryData.title}</span>
-      </nav>
+  <span class="category-card__link">
+    Explore Topic →
+  </span>
+</a>
 
-      <p class="eyebrow">Education Topic</p>
+<style>
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem;
+    min-height: 220px;
+    background: #ffffff;
+    border: 1px solid #e3e5e8;
+    border-top: 4px solid #b89660;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #24364a;
+    transition: box-shadow 0.2s ease;
+  }
 
-      <h1>{categoryData.title}</h1>
+  .category-card:hover {
+    box-shadow: 0 12px 30px rgba(15, 35, 55, 0.1);
+  }
 
-      <p class="category-page__intro">
-        {categoryData.description}
-      </p>
+  .category-card h3 {
+    margin: 0 0 0.85rem;
+    font-size: 1.4rem;
+  }
 
-      <div class="category-page__note">
-        <h2>Educational Resources</h2>
+  .category-card p {
+    margin: 0;
+    color: #607080;
+    line-height: 1.7;
+  }
 
-        <p>
-          Resources covering this topic will be added
-          in a future phase.
-        </p>
-      </div>
-
-    </div>
-  </section>
-</Layout>
+  .category-card__link {
+    color: #173b56;
+    font-weight: 700;
+  }
+</style>
