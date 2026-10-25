@@ -1,26 +1,203 @@
-body{
-    margin: 0px;
-}
-.navbar ul{
-    list-style-type: none;
-    background-color: hsl(0, 0%, 25%);
-    padding: 0px;
-    margin: 0px;
-    overflow: hidden;
+:root {
+  --navy: #0b2d5b;
+  --gold: #d4a853;
+  --sky-blue: #4f8cc9;
+  --warm-white: #faf9f6;
+  --light-blue: #e6f0f8;
+  --text: #1a1a1a;
 }
 
-.navbar a{
-    color: white;
-    text-decoration: none;
-    padding: 15px;
-    display: block;
-    text-align: center;
+body {
+  margin: 0;
+  background-color: var(--warm-white);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
 }
 
-.navbar a:hover{
-    background-color: hsl(0, 0%, 10%);
+h1, h2, h3 {
+  color: var(--navy);
+  font-family: Georgia, serif;
 }
 
-.navbar li{
-    float: left;
+.navbar ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  float: none;
+}
+
+.navbar a {
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  color: var(--gold);
+}
+
+
+/* Homepage lighthouse hero */
+
+.home-hero {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 600px;
+  overflow: hidden;
+  background: var(--navy);
+}
+
+.home-hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.home-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 490px;
+  margin: 40px 5%;
+  padding: 36px;
+  border-radius: 12px;
+  background: rgba(11, 45, 91, 0.88);
+  color: white;
+}
+
+.hero-eyebrow {
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #f0cf88;
+}
+
+.home-hero-content h1 {
+  color: white;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.15;
+  margin: 16px 0;
+}
+
+.home-hero-content p {
+  line-height: 1.7;
+}
+
+.hero-button {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 14px 22px;
+  background: var(--gold);
+  color: #0b2d5b;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.hero-button:hover {
+  background: #e6bd6d;
+}
+
+/* Mobile homepage */
+
+@media (max-width: 600px) {
+  .home-hero {
+    min-height: 650px;
+    justify-content: center;
+    align-items: flex-end;
+  }
+
+  .home-hero-image {
+    object-position: 35% center;
+  }
+
+  .home-hero-content {
+    width: calc(100% - 32px);
+    margin: 16px;
+    padding: 24px;
+  }
+}
+
+
+/* Education page */
+
+.education-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.education-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .education-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .education-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .education-container {
+    padding: 24px 16px;
+  }
+}
+
+
+/* Full-width, full-height lighthouse homepage only.
+   The current index.astro uses .lighthouse-hero, not .home-hero. */
+body:has(.lighthouse-hero) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Overrides any generic max-width or padding on a main wrapper.
+   Other pages such as Education keep their normal layout. */
+body:has(.lighthouse-hero) main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+body:has(.lighthouse-hero) .lighthouse-hero {
+  box-sizing: border-box;
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+body:has(.lighthouse-hero) .lighthouse-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Preserve the existing header and footer. */
+body:has(.lighthouse-hero) header,
+body:has(.lighthouse-hero) footer {
+  flex-shrink: 0;
 }

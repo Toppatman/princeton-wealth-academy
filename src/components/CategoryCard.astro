@@ -1,0 +1,58 @@
+---
+import type { EducationCategory } from "../data/educationCategories";
+
+interface Props {
+  category: EducationCategory;
+}
+
+const { category } = Astro.props;
+---
+
+<a class="category-card" href={`/education/${category.slug}/`}>
+  <div class="category-card__content">
+    <h3>{category.title}</h3>
+    <p>{category.description}</p>
+  </div>
+
+  <span class="category-card__link">
+    Explore Topic →
+  </span>
+</a>
+
+<style>
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem;
+    min-height: 220px;
+    background: #ffffff;
+    border: 1px solid #e3e5e8;
+    border-top: 4px solid #b89660;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #24364a;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .category-card:hover {
+    box-shadow: 0 12px 30px rgba(15, 35, 55, 0.1);
+  }
+
+  .category-card h3 {
+    margin: 0 0 0.85rem;
+    font-size: 1.4rem;
+  }
+
+  .category-card p {
+    margin: 0;
+    color: #607080;
+    line-height: 1.7;
+  }
+
+  .category-card__link {
+    color: #173b56;
+    font-weight: 700;
+  }
+</style>

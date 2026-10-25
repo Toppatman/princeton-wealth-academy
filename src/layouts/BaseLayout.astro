@@ -10,6 +10,7 @@ interface Props {
 
 const { title, description = 'Princeton Wealth Academy educational website.' } = Astro.props;
 const pageTitle = title === 'Home' ? 'Princeton Wealth Academy' : `${title} | Princeton Wealth Academy`;
+const isHome = Astro.url.pathname === '/';
 ---
 
 <!doctype html>
@@ -20,7 +21,7 @@ const pageTitle = title === 'Home' ? 'Princeton Wealth Academy' : `${title} | Pr
     <meta name="description" content={description} />
     <title>{pageTitle}</title>
   </head>
-  <body>
+  <body class={isHome ? 'home-page' : undefined}>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <Header />
     <main id="main-content" class="site-main"><slot /></main>
@@ -28,8 +29,54 @@ const pageTitle = title === 'Home' ? 'Princeton Wealth Academy' : `${title} | Pr
   </body>
 </html>
 
+
 <style>
-  .site-main { max-width: 72rem; min-height: 50vh; padding: 2rem 1.25rem; margin: 0 auto; }
-  .skip-link { position: absolute; left: -9999px; top: 0; background: white; color: black; padding: 0.5rem; }
-  .skip-link:focus { left: 0.5rem; z-index: 10; }
+  /* Default layout for all pages */
+
+  .site-main {
+    max-width: 72rem;
+    min-height: 50vh;
+    padding: 2rem 1.25rem;
+    margin: 0 auto;
+  }
+
+  /* Homepage occupies the entire viewport */
+
+  :global(body.home-page) {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Remove homepage width and spacing restrictions */
+
+  :global(body.home-page) .site-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: none;
+    min-height: 0;
+
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Accessibility: skip navigation */
+
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: white;
+    color: black;
+    padding: 0.5rem;
+  }
+
+  .skip-link:focus {
+    left: 0.5rem;
+    z-index: 10;
+  }
 </style>
