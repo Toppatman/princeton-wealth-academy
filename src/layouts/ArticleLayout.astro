@@ -1,0 +1,129 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Reference {
+  title: string;
+  url?: string;
+}
+
+interface RelatedArticle {
+  title: string;
+  url: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  category: string;
+  author: 'Sharon R. Deng, MBA';
+  published: Date;
+  updated: Date;
+  references: Reference[];
+  relatedArticles: RelatedArticle[];
+}
+
+const {
+  title,
+  description,
+  category,
+  author,
+  published,
+  updated,
+  references,
+  relatedArticles,
+} = Astro.props;
+
+const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+}).format(date);
+const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="insight-article">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/insights/">Insights</a>
+      <span aria-hidden="true">/</span>
+      <span>{category}</span>
+    </nav>
+
+    <header class="article-header">
+      <p class="article-category">{category}</p>
+      <h1>{title}</h1>
+      <p class="description">{description}</p>
+      <div class="byline">
+        <p>By <a href="/about/sharon-deng/">{author}</a></p>
+        <p>Published: <time datetime={dateAttribute(published)}>{formatDate(published)}</time></p>
+        <p>Last updated: <time datetime={dateAttribute(updated)}>{formatDate(updated)}</time></p>
+      </div>
+    </header>
+
+    <div class="article-body"><slot /></div>
+
+    <footer class="article-footer">
+      <section aria-labelledby="references-heading">
+        <h2 id="references-heading">Sources / References</h2>
+        {references.length > 0 ? (
+          <ol>
+            {references.map((reference) => (
+              <li>
+                {reference.url ? (
+                  <a href={reference.url} rel="noopener noreferrer">{reference.title}</a>
+                ) : (
+                  reference.title
+                )}
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p>No sources have been added yet.</p>
+        )}
+      </section>
+
+      <section aria-labelledby="related-heading">
+        <h2 id="related-heading">Related Articles</h2>
+        {relatedArticles.length > 0 ? (
+          <ul>
+            {relatedArticles.map((item) => (
+              <li><a href={item.url}>{item.title}</a></li>
+            ))}
+          </ul>
+        ) : (
+          <p>No related articles yet.</p>
+        )}
+      </section>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .insight-article {
+    width: min(100%, 780px);
+    margin: 0 auto;
+    padding: clamp(1rem, 3vw, 2rem) 0 3rem;
+    color: #23354a;
+  }
+  a { color: #174b80; text-underline-offset: 3px; }
+  a:hover, a:focus-visible { color: #9a6a13; }
+  .breadcrumbs { display: flex; gap: .6rem; align-items: center; color: #566779; font-size: .92rem; margin-bottom: 2rem; }
+  .article-header { border-bottom: 1px solid #d8dfe7; padding-bottom: 1.8rem; margin-bottom: 2rem; }
+  .article-category { color: #936519; letter-spacing: .09em; font-size: .85rem; font-weight: 700; text-transform: uppercase; }
+  h1 { color: #13385c; font-family: Georgia, serif; font-size: clamp(2rem, 4.5vw, 3.1rem); line-height: 1.16; margin: .45rem 0 1rem; }
+  .description { line-height: 1.7; font-size: 1.1rem; color: #4c5c6a; }
+  .byline { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; margin-top: 1.5rem; font-size: .95rem; }
+  .byline p { margin: 0; }
+  .article-body { font-size: 1.06rem; line-height: 1.85; overflow-wrap: anywhere; }
+  .article-body :global(h2) { color: #13385c; font-family: Georgia, serif; font-size: 1.65rem; margin: 2rem 0 .7rem; line-height: 1.3; }
+  .article-body :global(h3) { color: #13385c; font-size: 1.3rem; margin: 1.7rem 0 .5rem; }
+  .article-body :global(p), .article-body :global(ul), .article-body :global(ol) { margin: 0 0 1.3rem; }
+  .article-body :global(blockquote) { margin: 1.5rem 0; padding: 1rem 1.2rem; background: #f4f6f8; border-left: 4px solid #bf913c; }
+  .article-body :global(a) { color: #174b80; }
+  .article-footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #d8dfe7; }
+  .article-footer section { margin-top: 2rem; }
+  .article-footer h2 { color: #13385c; font-family: Georgia, serif; font-size: 1.4rem; }
+  .article-footer li { margin-bottom: .6rem; overflow-wrap: anywhere; }
+  @media (max-width: 600px) { .byline { display: block; } .byline p + p { margin-top: .4rem; } }
+</style>
