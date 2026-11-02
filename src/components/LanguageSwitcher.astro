@@ -1,0 +1,56 @@
+---
+interface Props {
+  englishUrl: string;
+  chineseUrl: string;
+  currentLanguage: 'en' | 'zh';
+}
+
+const {
+  englishUrl,
+  chineseUrl,
+  currentLanguage,
+} = Astro.props;
+---
+
+<nav aria-label="Article language">
+  <a
+    href={englishUrl}
+    lang="en"
+    aria-current={currentLanguage === 'en' ? 'page' : undefined}
+  >
+    English
+  </a>
+
+  <span aria-hidden="true">|</span>
+
+  <a
+    href={chineseUrl}
+    lang="zh-Hans"
+    aria-current={currentLanguage === 'zh' ? 'page' : undefined}
+  >
+    中文
+  </a>
+</nav>
+
+<style>
+  nav {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin: 1rem 0;
+  }
+
+  a {
+    color: #17365d;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  a[aria-current="page"] {
+    font-weight: 700;
+    text-decoration: underline;
+  }
+</style>
