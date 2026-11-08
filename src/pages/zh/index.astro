@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Home" description="普林斯顿财富学院提供易于理解的财务教育资源，帮助您了解人生重要的财务课题。">
+  <div class="home-main">
+    <section class="lighthouse-hero" aria-labelledby="home-heading">
+      <img
+        src="/images/Homepage.jpeg"
+        alt="灯塔矗立在岩石海岸旁，远眺大海"
+        class="lighthouse-photo"
+        width="6668"
+        height="3312"
+        fetchpriority="high"
+      />
+      <div class="hero-copy">
+        <p class="hero-eyebrow">Princeton Wealth Academy</p>
+        <h1 id="home-heading">为人生重要决策提供财务教育</h1>
+        <p class="hero-description">探索易于理解的教育资源，深入了解重要的财务知识。</p>
+        <a href="/zh/education/" class="hero-button">
+          探索财务教育 <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+<style>
+  /* Adapted from the existing English lighthouse homepage. */
+  .lighthouse-hero {
+    position:relative; display:flex; align-items:center; justify-content:flex-end;
+    flex:1; width:100%; min-height:520px; padding:clamp(24px, 5vw, 80px);
+    overflow:hidden; isolation:isolate; background:#0b2d5b;
+  }
+  .lighthouse-photo {
+    position:absolute; inset:0; z-index:-2; width:100%; height:100%;
+    display:block; object-fit:cover; object-position:center;
+  }
+  .lighthouse-hero::before {
+    content:''; position:absolute; inset:0; z-index:-1;
+    background:linear-gradient(90deg, transparent 30%, rgba(7,24,48,.14) 60%, rgba(7,24,48,.52) 100%);
+    pointer-events:none;
+  }
+  .hero-copy { width:min(100%, 530px); color:#fff; }
+  .hero-eyebrow {
+    margin:0 0 16px; color:#ffe0a2; text-transform:uppercase;
+    font-size:.85rem; letter-spacing:.08em; text-shadow:0 1px 5px rgba(0,0,0,.5);
+  }
+  .hero-copy h1 {
+    margin:0 0 20px; font-family:Georgia, 'Noto Serif SC', serif;
+    font-size:clamp(2.2rem, 4.1vw, 3.7rem); line-height:1.12;
+    color:#fff; text-shadow:0 2px 8px rgba(0,0,0,.6);
+  }
+  .hero-description {
+    max-width:450px; margin:0 0 28px; font-size:clamp(1rem, 1.35vw, 1.1rem);
+    line-height:1.7; text-shadow:0 1px 6px rgba(0,0,0,.7);
+  }
+  .hero-button {
+    display:inline-block; padding:15px 22px; border-radius:6px; background:#d4a853;
+    color:#0b2d5b; font-weight:700; text-decoration:none;
+    transition:background-color .2s ease;
+  }
+  .hero-button:hover { background:#e4bc70; }
+  .hero-button:focus-visible { outline:3px solid #fff; outline-offset:3px; }
+  @media (max-width:600px) {
+    .lighthouse-hero { align-items:flex-end; min-height:640px; padding:28px 20px; }
+    .lighthouse-photo { object-position:28% center; }
+    .lighthouse-hero::before {
+      background:linear-gradient(to bottom, transparent 14%, rgba(7,24,48,.08) 32%, rgba(7,24,48,.8) 100%);
+    }
+    .hero-copy h1 { font-size:clamp(2rem, 9vw, 2.8rem); }
+  }
+  .home-main {
+    flex:1; display:flex; flex-direction:column; width:100%; min-width:0; min-height:0;
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { educationCategoriesZh } from '../../../i18n/educationCategoriesZh';
+
+type ChineseEducationCategory = {
+  slug: string;
+  title: string;
+  description: string;
+};
+
+export function getStaticPaths() {
+  return Object.entries(educationCategoriesZh).map(([slug, text]) => ({
+    params: { category: slug },
+    props: { categoryData: { slug, ...text } },
+  }));
+}
+const { categoryData } = Astro.props as { categoryData: ChineseEducationCategory };
+---
+<BaseLayout title={categoryData.title} description={categoryData.description}>
+  <section class="category-page">
+    <div class="education-container">
+      <nav class="breadcrumbs" aria-label="面包屑导航">
+        <a href="/zh/education/">财务教育</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{categoryData.title}</span>
+      </nav>
+      <p class="eyebrow">教育主题</p>
+      <h1>{categoryData.title}</h1>
+      <p class="category-page__intro">{categoryData.description}</p>
+      <div class="category-page__note">
+        <h2>教育资源</h2>
+        <p>有关此主题的更多资源将在后续阶段添加。</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

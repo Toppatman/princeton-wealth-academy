@@ -1,10 +1,11 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArticleLayout from '../../../layouts/ArticleLayout.astro';
 import LanguageSwitcher from '../../../components/LanguageSwitcher.astro';
 ---
 
-<BaseLayout title="退休收入规划 | Princeton Wealth Academy">
-  <main lang="zh-Hans">
+<BaseLayout title="Language Test | Princeton Wealth Academy">
+  <main>
     <LanguageSwitcher
       englishUrl="/insights/language-test"
       chineseUrl="/zh/insights/language-test"
@@ -12,13 +13,14 @@ import LanguageSwitcher from '../../../components/LanguageSwitcher.astro';
     />
 
     <article>
-      <h1>退休收入规划</h1>
+      <h1>Retirement Income Planning</h1>
 
-      <p>作者：Sharon R. Deng, MBA</p>
+      <p>Author: Sharon R. Deng, MBA</p>
 
       <p>
-        这是一篇用于测试网站多语言功能的中文示例文章。
+        This is a sample English article
+        demonstrating multilingual support.
       </p>
     </article>
   </main>
-</BaseLayout>
+</BaseLayout>s

@@ -1,56 +1,45 @@
 ---
+/** Global EN/中文 switcher. Uses section landing pages for untranslated deep links. */
 interface Props {
-  englishUrl: string;
-  chineseUrl: string;
-  currentLanguage: 'en' | 'zh';
+  englishUrl?: string;
+  chineseUrl?: string;
+  currentLanguage?: 'en' | 'zh'; // Backward compatibility with Phase 4 test pages
 }
+const { englishUrl, chineseUrl } = Astro.props;
+const current = Astro.url.pathname;
+const isChinese = current === '/zh' || current.startsWith('/zh/');
+const englishPath = (current.replace(/^\/zh(?=\/|$)/, '') || '/');
+const normalize = (p: string) => p.replace(/\/+$/, '') || '/';
+const supported = new Set([
+  '/', '/about', '/about/sharon-deng', '/education',
+  '/insights', '/events', '/resources', '/contact',
+  '/education/retirement', '/education/investments-asset-allocation',
+  '/education/tax-education', '/education/insurance-risk-management',
+  '/education/long-term-care', '/education/estate-legacy-planning',
+  '/education/college-funding',
+]);
 
-const {
-  englishUrl,
-  chineseUrl,
-  currentLanguage,
-} = Astro.props;
+const standardPath = normalize(englishPath);
+const translatedPage = supported.has(standardPath)
+  ? englishPath
+  : standardPath.startsWith('/insights/') ? '/insights/'
+  : standardPath.startsWith('/events/') ? '/events/'
+  : standardPath.startsWith('/education/') ? '/education/'
+  : standardPath.startsWith('/about/') ? '/about/'
+  : standardPath.startsWith('/resources/') ? '/resources/'
+  : '/';
+
+const enHref = englishUrl || (isChinese ? translatedPage : englishPath);
+const zhHref = chineseUrl || (translatedPage === '/' ? '/zh/' : `/zh${translatedPage}`);
 ---
-
-<nav aria-label="Article language">
-  <a
-    href={englishUrl}
-    lang="en"
-    aria-current={currentLanguage === 'en' ? 'page' : undefined}
-  >
-    English
-  </a>
-
+<nav class="language-switcher" aria-label={isChinese ? '选择语言' : 'Choose language'}>
+  <a href={enHref} lang="en" aria-current={!isChinese ? 'page' : undefined}>English</a>
   <span aria-hidden="true">|</span>
-
-  <a
-    href={chineseUrl}
-    lang="zh-Hans"
-    aria-current={currentLanguage === 'zh' ? 'page' : undefined}
-  >
-    中文
-  </a>
+  <a href={zhHref} lang="zh-Hans" aria-current={isChinese ? 'page' : undefined}>中文</a>
 </nav>
-
 <style>
-  nav {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    margin: 1rem 0;
-  }
-
-  a {
-    color: #17365d;
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  a[aria-current="page"] {
-    font-weight: 700;
-    text-decoration: underline;
-  }
+  .language-switcher { display: inline-flex; align-items: center; gap: .5rem; white-space: nowrap; font-size: .9rem; }
+  .language-switcher a { color: var(--navy, #0b2d5b); text-decoration: none; }
+  .language-switcher a:hover, .language-switcher a[aria-current="page"] { text-decoration: underline; text-underline-offset: .2rem; }
+  .language-switcher a[aria-current="page"] { font-weight: 700; }
 </style>

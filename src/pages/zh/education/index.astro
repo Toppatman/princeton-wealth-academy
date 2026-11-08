@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ChineseCategoryCard from '../../../components/ChineseCategoryCard.astro';
+import { educationCategoriesZh } from '../../../i18n/educationCategoriesZh';
+
+// Translation entries are keyed by the English category slug.
+const chineseCategoryList = Object.entries(educationCategoriesZh).map(([slug, text]) => ({
+  slug,
+  ...text,
+}));
+---
+<BaseLayout title="财务教育" description="探索退休、投资、税务、保险、长期护理、遗产规划及大学教育资金等主题。">
+  <section class="education-hero">
+    <div class="education-container">
+      <p class="eyebrow">财务教育</p>
+      <h1>探索财务教育</h1>
+      <p class="hero-description">通过清晰易懂的教育资源，加深您对重要财务主题的认识。</p>
+    </div>
+  </section>
+  <section class="education-section">
+    <div class="education-container">
+      <h2>按主题浏览</h2>
+      <p class="section-description">选择一个主题，开始探索。</p>
+      <div class="education-grid">
+        {chineseCategoryList.map((category) => (
+          <ChineseCategoryCard category={category} />
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
