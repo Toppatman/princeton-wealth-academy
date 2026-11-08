@@ -10,11 +10,14 @@ interface Props {
 
 const { title, description = 'Princeton Wealth Academy educational website.' } = Astro.props;
 const pageTitle = title === 'Home' ? 'Princeton Wealth Academy' : `${title} | Princeton Wealth Academy`;
-const isHome = Astro.url.pathname === '/';
+const isHome =
+  Astro.url.pathname === '/' ||
+  Astro.url.pathname === '/zh' ||
+  Astro.url.pathname === '/zh/';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={Astro.currentLocale === 'zh' ? 'zh-Hans' : 'en'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -79,4 +82,27 @@ const isHome = Astro.url.pathname === '/';
     left: 0.5rem;
     z-index: 10;
   }
+  
+  /* Homepage fills the available viewport */
+  :global(body.home-page) {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Remove normal page width restrictions */
+  :global(body.home-page) .site-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: none;
+    min-height: 0;
+
+    margin: 0;
+    padding: 0;
+  }
+
 </style>

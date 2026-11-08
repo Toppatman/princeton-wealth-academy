@@ -1,0 +1,131 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  event: CollectionEntry<'events'>;
+  lang: 'en' | 'zh';
+}
+
+const { event, lang } = Astro.props;
+const d = event.data;
+const zh = lang === 'zh';
+const prefix = zh ? '/zh' : '';
+const words = zh
+  ? {
+      back: '← 返回活动列表', date: '日期', location: '地点或线上',
+      presented: '主讲人', hosted: '主办方', collaboration: '合作方',
+      learn: '您将学到什么', resources: '相关资源',
+      photos: '活动照片', video: '活动录像', recap: '活动回顾',
+      slides: '讲座资料', articles: '相关文章',
+      noDate: '日期待定', noLocation: '地点待定',
+    }
+  : {
+      back: '← Back to Events', date: 'Date', location: 'Location or Online',
+      presented: 'Presented by', hosted: 'Hosted by', collaboration: 'In collaboration with',
+      learn: 'What You Will Learn', resources: 'Related Resources',
+      photos: 'Event Photos', video: 'Event Recording', recap: 'Event Recap',
+      slides: 'Presentation Resources', articles: 'Related Articles',
+      noDate: 'Date to be announced', noLocation: 'Location to be announced',
+    };
+
+const formattedDate = d.date
+  ? new Intl.DateTimeFormat(zh ? 'zh-CN' : 'en-US', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    }).format(d.date)
+  : words.noDate;
+---
+
+<BaseLayout title={d.title} description={d.description}>
+  <article class="event-page">
+    <a class="back" href={`${prefix}/events/`}>{words.back}</a>
+    <header>
+      <h1>{d.title}</h1>
+      <p class="description">{d.description}</p>
+    </header>
+
+    <dl class="event-details">
+      <div>
+        <dt>{words.date}</dt>
+        <dd>{d.date ? <time datetime={d.date.toISOString()}>{formattedDate}</time> : formattedDate}</dd>
+      </div>
+      <div><dt>{words.location}</dt><dd>{d.location ?? words.noLocation}</dd></div>
+      <div><dt>{words.presented}</dt><dd>{d.presentedBy}</dd></div>
+      <div><dt>{words.hosted}</dt><dd>{d.hostedBy}</dd></div>
+      {d.collaboration && <div><dt>{words.collaboration}</dt><dd>{d.collaboration}</dd></div>}
+    </dl>
+
+    {d.whatYouWillLearn.length > 0 && (
+      <section>
+        <h2>{words.learn}</h2>
+        <ul>{d.whatYouWillLearn.map((item) => <li>{item}</li>)}</ul>
+      </section>
+    )}
+
+    <div class="event-content"><slot /></div>
+
+    {d.relatedResources.length > 0 && (
+      <section>
+        <h2>{words.resources}</h2>
+        <ul>{d.relatedResources.map((item) =>
+          <li><a href={item.url}>{item.title}</a></li>
+        )}</ul>
+      </section>
+    )}
+
+    {d.recap && <section><h2>{words.recap}</h2><p>{d.recap}</p></section>}
+
+    {d.photos.length > 0 && (
+      <section>
+        <h2>{words.photos}</h2>
+        <div class="photos">
+          {d.photos.map((photo) =>
+            <img src={photo.src} alt={photo.alt} loading="lazy" width="640" height="400" />
+          )}
+        </div>
+      </section>
+    )}
+
+    {d.videoUrl && (
+      <section>
+        <h2>{words.video}</h2>
+        <a href={d.videoUrl}>{zh ? '观看录像' : 'Watch the recording'}</a>
+      </section>
+    )}
+
+    {d.presentationResources.length > 0 && (
+      <section>
+        <h2>{words.slides}</h2>
+        <ul>{d.presentationResources.map((item) =>
+          <li><a href={item.url}>{item.title}</a></li>
+        )}</ul>
+      </section>
+    )}
+
+    {d.relatedArticles.length > 0 && (
+      <section>
+        <h2>{words.articles}</h2>
+        <ul>{d.relatedArticles.map((item) =>
+          <li><a href={item.url}>{item.title}</a></li>
+        )}</ul>
+      </section>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .event-page { max-width: 52rem; margin: 0 auto 3rem; line-height: 1.7; }
+  .back { display: inline-block; margin-bottom: 1.5rem; color: #173958; }
+  h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; }
+  .description { color: #52606c; font-size: 1.1rem; }
+  .event-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,13rem), 1fr)); gap: 1rem; padding: 1.25rem; border: 1px solid #d9dfe5; border-radius: .75rem; }
+  dt { color: #52606c; font-size: .85rem; font-weight: 700; }
+  dd { margin: .2rem 0 0; }
+  section, .event-content { margin-top: 2rem; }
+  section h2 { margin-bottom: .6rem; font-size: 1.35rem; }
+  li { margin: .35rem 0; }
+  a { color: #173958; }
+  .photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,15rem),1fr)); gap: 1rem; }
+  .photos img { display: block; width: 100%; height: auto; border-radius: .5rem; }
+  :global(.event-content p) { margin: .8rem 0; }
+</style>

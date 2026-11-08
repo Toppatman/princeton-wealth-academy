@@ -1,5 +1,6 @@
-
 ---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
 const menuItems = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about/' },
@@ -40,17 +41,24 @@ const isCurrent = (href: string) =>
     </ul>
   </nav>
 
-  <!-- Mobile hamburger button -->
-  <button
-    id="menu-button"
-    class="menu-button"
-    type="button"
-    aria-label="Open navigation menu"
-    aria-controls="mobile-menu"
-    aria-expanded="false"
-  >
-    <span aria-hidden="true">☰</span>
-  </button>
+  <!-- Language switcher stays outside the mobile drawer -->
+  <div class="header-actions">
+    <div class="header-language-switcher">
+      <LanguageSwitcher />
+    </div>
+
+    <!-- Mobile hamburger button -->
+    <button
+      id="menu-button"
+      class="menu-button"
+      type="button"
+      aria-label="Open navigation menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+    >
+      <span aria-hidden="true">☰</span>
+    </button>
+  </div>
 </header>
 
 <!-- Mobile slide-out sidebar -->
@@ -275,6 +283,46 @@ const isCurrent = (href: string) =>
   @media (max-width: 380px) {
     .brand {
       font-size: 1rem;
+    }
+  }
+
+  /* Language selection is always separate from the mobile drawer. */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .header-language-switcher {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .header-language-switcher :global(.language-switcher) {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 480px) {
+    .site-header {
+      gap: 0.5rem;
+      padding: 0.75rem;
+    }
+
+    .brand {
+      min-width: 0;
+      font-size: 0.95rem;
+    }
+
+    .header-actions {
+      gap: 0.35rem;
+    }
+
+    .header-language-switcher :global(.language-switcher) {
+      gap: 0.3rem;
+      font-size: 0.8rem;
     }
   }
 </style>

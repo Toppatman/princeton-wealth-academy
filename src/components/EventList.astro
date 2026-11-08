@@ -1,0 +1,82 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+interface Props {
+  lang: 'en' | 'zh';
+}
+
+const { lang } = Astro.props;
+const zh = lang === 'zh';
+const prefix = zh ? '/zh' : '';
+const events = (await getCollection('events'))
+  .filter((entry) => entry.data.lang === lang && entry.id.startsWith(`${lang}/`))
+  .sort((a, b) =>
+    (a.data.date?.getTime() ?? Number.POSITIVE_INFINITY)
+    - (b.data.date?.getTime() ?? Number.POSITIVE_INFINITY)
+  );
+
+const formatDate = (date?: Date) =>
+  date
+    ? new Intl.DateTimeFormat(zh ? 'zh-CN' : 'en-US', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      }).format(date)
+    : (zh ? '日期待定' : 'Date to be announced');
+---
+
+<BaseLayout
+  title={zh ? '活动与讲座' : 'Events & Workshops'}
+  description={zh
+    ? '了解普林斯顿财富学院的财务教育活动。'
+    : 'Explore Princeton Wealth Academy financial education workshops.'}
+>
+  <div class="events-list">
+    <header>
+      <p class="eyebrow">PRINCETON WEALTH ACADEMY</p>
+      <h1>{zh ? '教育活动与讲座' : 'Educational Events & Workshops'}</h1>
+      <p>{zh
+        ? '浏览旨在帮助您理解重要财务主题的教育活动。'
+        : 'Explore workshops designed to help you understand important financial topics.'}</p>
+    </header>
+
+    {events.length === 0 ? (
+      <p>{zh ? '目前没有活动。' : 'No events are currently listed.'}</p>
+    ) : (
+      <div class="event-grid">
+        {events.map((event) => {
+          const slug = event.id.slice(`${lang}/`.length);
+          return (
+            <article class="event-card">
+              <p class="event-date">{formatDate(event.data.date)}</p>
+              <h2><a href={`${prefix}/events/${slug}/`}>{event.data.title}</a></h2>
+              <p>{event.data.description}</p>
+              <p class="event-location">
+                {event.data.location ?? (zh ? '地点待定' : 'Location to be announced')}
+              </p>
+              <a class="event-link" href={`${prefix}/events/${slug}/`}>
+                {zh ? '查看活动详情 →' : 'View event details →'}
+              </a>
+            </article>
+          );
+        })}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .events-list { max-width: 70rem; margin: 0 auto; }
+  header { margin: 1rem 0 2.5rem; }
+  .eyebrow { color: #a7812c; font-size: .75rem; font-weight: 700; letter-spacing: .14em; }
+  h1 { font-size: clamp(2rem, 4vw, 3rem); margin: .5rem 0; }
+  header > p:last-child { max-width: 45rem; color: #52606c; line-height: 1.7; }
+  .event-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,20rem),1fr)); gap: 1.25rem; }
+  .event-card { padding: 1.5rem; border: 1px solid #d9dfe5; border-radius: .8rem; background: #fff; }
+  .event-date { font-size: .9rem; font-weight: 700; color: #8b691e; }
+  .event-card h2 { margin: .7rem 0; font-size: 1.4rem; }
+  .event-card h2 a { color: #173958; text-decoration: none; }
+  .event-card h2 a:hover, .event-link:hover { text-decoration: underline; }
+  .event-card > p:not(.event-date) { line-height: 1.6; }
+  .event-location { color: #52606c; font-size: .9rem; }
+  .event-link { display: inline-block; margin-top: .5rem; color: #173958; font-weight: 700; }
+</style>
