@@ -1,21 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import lighthouse from '../assets/Homepage.jpeg';
 ---
 
 <BaseLayout title="Home">
   <div class="home-main">
     <section class="lighthouse-hero" aria-labelledby="home-heading">
-      <img
-        src="/images/Homepage.jpeg"
+      <Image
+        src={lighthouse}
         alt="Lighthouse above a rocky coastline and the ocean"
         class="lighthouse-photo"
-        width="6668"
-        height="3312"
-        loading="eager"
-        decoding="async"
-        fetchpriority="high"
+        layout="full-width"
+        format="webp"
+        quality={75}
+        priority
       />
-
       <div class="hero-copy">
         <p class="hero-eyebrow">Princeton Wealth Academy</p>
 
