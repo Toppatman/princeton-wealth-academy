@@ -16,9 +16,9 @@ import lighthouse from '../assets/Homepage.jpeg';
         quality={75}
         priority
       />
+
       <div class="hero-copy">
         <p class="hero-eyebrow">Princeton Wealth Academy</p>
-
         <h1 id="home-heading">
           Financial Education for Life's Important Decisions
         </h1>
@@ -48,9 +48,12 @@ import lighthouse from '../assets/Homepage.jpeg';
     padding: clamp(24px, 5vw, 80px);
     overflow: hidden;
     isolation: isolate;
+    /* Neutral warm-white fallback instead of the original navy-blue flash. */
+    background: #faf9f6;
   }
 
-  .lighthouse-photo {
+  /* :global guarantees that styling reaches Astro's generated <img>. */
+  :global(.lighthouse-photo) {
     position: absolute;
     inset: 0;
     z-index: -2;
@@ -61,7 +64,7 @@ import lighthouse from '../assets/Homepage.jpeg';
     object-position: center;
   }
 
-  /* An edge-to-edge fade keeps white text legible without a navy box. */
+  /* Neutral contrast fade, without a navy loading-time overlay. */
   .lighthouse-hero::before {
     content: '';
     position: absolute;
@@ -70,8 +73,8 @@ import lighthouse from '../assets/Homepage.jpeg';
     background: linear-gradient(
       90deg,
       transparent 30%,
-      rgba(7, 24, 48, 0.14) 60%,
-      rgba(7, 24, 48, 0.52) 100%
+      rgba(0, 0, 0, 0.14) 60%,
+      rgba(0, 0, 0, 0.52) 100%
     );
     pointer-events: none;
   }
@@ -79,7 +82,6 @@ import lighthouse from '../assets/Homepage.jpeg';
   .hero-copy {
     width: min(100%, 530px);
     color: #fff;
-    /* No background color, border, or rectangular panel. */
   }
 
   .hero-eyebrow {
@@ -135,8 +137,7 @@ import lighthouse from '../assets/Homepage.jpeg';
       padding: 28px 20px;
     }
 
-    .lighthouse-photo {
-      /* Keeps the lighthouse toward the visible part of the mobile crop. */
+    :global(.lighthouse-photo) {
       object-position: 28% center;
     }
 
@@ -144,8 +145,8 @@ import lighthouse from '../assets/Homepage.jpeg';
       background: linear-gradient(
         to bottom,
         transparent 14%,
-        rgba(7, 24, 48, 0.08) 32%,
-        rgba(7, 24, 48, 0.8) 100%
+        rgba(0, 0, 0, 0.08) 32%,
+        rgba(0, 0, 0, 0.8) 100%
       );
     }
 
@@ -154,7 +155,6 @@ import lighthouse from '../assets/Homepage.jpeg';
     }
   }
 
-  /* Keep the hero as the only page content between header and footer. */
   .home-main {
     flex: 1;
     display: flex;
@@ -163,5 +163,4 @@ import lighthouse from '../assets/Homepage.jpeg';
     min-width: 0;
     min-height: 0;
   }
-
 </style>
