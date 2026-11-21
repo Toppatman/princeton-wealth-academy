@@ -11,6 +11,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         class="lighthouse-photo"
         width="6668"
         height="3312"
+        loading="eager"
+        decoding="async"
         fetchpriority="high"
       />
 
@@ -46,7 +48,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     padding: clamp(24px, 5vw, 80px);
     overflow: hidden;
     isolation: isolate;
-    background: #0b2d5b;
   }
 
   .lighthouse-photo {
