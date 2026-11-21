@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ResourceCategoryCard from './ResourceCategoryCard.astro';
+import {
+  resourceCategories,
+  resourceCopy,
+  type ResourceLocale,
+} from '../../data/resources';
+
+interface Props {
+  locale: ResourceLocale;
+}
+
+const { locale } = Astro.props;
+const copy = resourceCopy[locale];
+const educationHref = locale === 'zh' ? '/zh/education/' : '/education/';
+---
+
+<BaseLayout title={copy.pageTitle} description={copy.pageDescription}>
+  <section class="resources-hero" aria-labelledby="resources-title">
+    <div class="resources-container">
+      <p class="resources-eyebrow">{copy.eyebrow}</p>
+      <h1 id="resources-title">{copy.pageTitle}</h1>
+      <p class="resources-hero__intro">{copy.heroText}</p>
+    </div>
+  </section>
+
+  <section class="resources-section" aria-labelledby="resource-types-heading">
+    <div class="resources-container">
+      <div class="resources-section__header">
+        <h2 id="resource-types-heading">{copy.browseHeading}</h2>
+        <p>{copy.browseIntro}</p>
+      </div>
+
+      <div class="resources-grid">
+        {resourceCategories.map((category) => (
+          <ResourceCategoryCard category={category} locale={locale} />
+        ))}
+      </div>
+
+      <aside class="resources-note" aria-label={copy.noteTitle}>
+        <div>
+          <h2>{copy.noteTitle}</h2>
+          <p>{copy.noteText}</p>
+        </div>
+        <p class="resources-note__education">
+          {copy.educationText} <a href={educationHref}>{copy.educationLink}</a>.
+        </p>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .resources-container { width: 100%; max-width: 1100px; margin: 0 auto; }
+
+  .resources-hero {
+    padding: clamp(52px, 8vw, 94px) clamp(6px, 2vw, 20px);
+    border-radius: 16px;
+    background: linear-gradient(120deg, #0b2d5b, #154779);
+    color: white;
+  }
+
+  .resources-eyebrow {
+    margin: 0 0 15px;
+    color: #efd096;
+    font-weight: 700;
+    font-size: 0.81rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .resources-hero h1 {
+    margin: 0 0 18px;
+    color: #fff;
+    font: 700 clamp(2.4rem, 5vw, 4.2rem)/1.1 Georgia, serif;
+    letter-spacing: -0.025em;
+  }
+
+  .resources-hero__intro {
+    max-width: 710px;
+    margin: 0;
+    color: #e1edf8;
+    font-size: clamp(1rem, 2vw, 1.16rem);
+    line-height: 1.75;
+  }
+
+  .resources-section { padding: clamp(42px, 6vw, 64px) 0 42px; }
+  .resources-section__header { margin: 0 0 28px; }
+  .resources-section__header h2 {
+    margin: 0 0 8px;
+    font: 700 clamp(1.7rem, 3vw, 2.15rem)/1.25 Georgia, serif;
+    color: var(--navy, #0b2d5b);
+  }
+  .resources-section__header p { margin: 0; color: #516276; }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+  }
+
+  .resources-note {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 28px;
+    margin-top: 42px;
+    padding: 28px 30px;
+    border: 1px solid #d9e5f1;
+    border-radius: 12px;
+    background: #edf4fa;
+  }
+  .resources-note h2 { margin: 0 0 7px; color: #0b2d5b; font: 700 1.2rem/1.35 Georgia, serif; }
+  .resources-note p { margin: 0; color: #415870; line-height: 1.6; }
+  .resources-note__education { flex: 0 0 230px; font-size: 0.92rem; }
+  .resources-note__education a { color: #0b2d5b; font-weight: 700; }
+  .resources-note__education a:focus-visible { outline: 3px solid #4f8cc9; outline-offset: 4px; }
+
+  @media (max-width: 900px) {
+    .resources-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .resources-note { align-items: flex-start; flex-direction: column; gap: 14px; }
+    .resources-note__education { flex-basis: auto; }
+  }
+  @media (max-width: 620px) {
+    .resources-hero { padding: 40px 24px; }
+    .resources-grid { grid-template-columns: 1fr; }
+    .resources-note { padding: 24px; }
+    .resources-section { padding-top: 36px; }
+  }
+</style>
