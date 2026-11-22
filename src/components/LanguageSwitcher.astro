@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 /** Global EN/中文 switcher. Uses section landing pages for untranslated deep links. */
 interface Props {
   englishUrl?: string;
@@ -17,6 +18,8 @@ const supported = new Set([
   '/education/tax-education', '/education/insurance-risk-management',
   '/education/long-term-care', '/education/estate-legacy-planning',
   '/education/college-funding',
+  '/resources/guides', '/resources/checklists',
+  '/resources/faqs', '/resources/videos', '/resources/workshop-materials',
 ]);
 
 const standardPath = normalize(englishPath);
@@ -29,8 +32,25 @@ const translatedPage = supported.has(standardPath)
   : standardPath.startsWith('/resources/') ? '/resources/'
   : '/';
 
-const enHref = englishUrl || (isChinese ? translatedPage : englishPath);
-const zhHref = chineseUrl || (translatedPage === '/' ? '/zh/' : `/zh${translatedPage}`);
+let enHref = translatedPage;
+let zhHref = translatedPage === '/' ? '/zh/' : `/zh${translatedPage}`;
+if (standardPath.startsWith('/insights/')) {
+  const slug = standardPath.slice('/insights/'.length);
+  const entries = await getCollection('insights');
+  enHref = entries.some((entry) => entry.id === slug)
+    ? `/insights/${slug}/` : '/insights/';
+  zhHref = entries.some((entry) => entry.id === `zh/${slug}`)
+    ? `/zh/insights/${slug}/` : '/zh/insights/';
+} else if (standardPath.startsWith('/events/')) {
+  const slug = standardPath.slice('/events/'.length);
+  const entries = await getCollection('events');
+  enHref = entries.some((entry) => entry.id === `en/${slug}`)
+    ? `/events/${slug}/` : '/events/';
+  zhHref = entries.some((entry) => entry.id === `zh/${slug}`)
+    ? `/zh/events/${slug}/` : '/zh/events/';
+}
+enHref = englishUrl || enHref;
+zhHref = chineseUrl || zhHref;
 ---
 <nav class="language-switcher" aria-label={isChinese ? '选择语言' : 'Choose language'}>
   <a href={enHref} lang="en" aria-current={!isChinese ? 'page' : undefined}>English</a>

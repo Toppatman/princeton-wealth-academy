@@ -10,6 +10,7 @@ interface Props {
 
 const { title, description = 'Princeton Wealth Academy educational website.' } = Astro.props;
 const pageTitle = title === 'Home' ? 'Princeton Wealth Academy' : `${title} | Princeton Wealth Academy`;
+const isChinese = Astro.url.pathname === '/zh' || Astro.url.pathname.startsWith('/zh/');
 const isHome =
   Astro.url.pathname === '/' ||
   Astro.url.pathname === '/zh' ||
@@ -17,7 +18,7 @@ const isHome =
 ---
 
 <!doctype html>
-<html lang={Astro.currentLocale === 'zh' ? 'zh-Hans' : 'en'}>
+<html lang={isChinese ? 'zh-Hans' : 'en'}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,7 +26,7 @@ const isHome =
     <title>{pageTitle}</title>
   </head>
   <body class={isHome ? 'home-page' : undefined}>
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content">{isChinese ? '跳至主要内容' : 'Skip to content'}</a>
     <Header />
     <main id="main-content" class="site-main"><slot /></main>
     <Footer />
