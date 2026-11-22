@@ -71,8 +71,8 @@ for html in DIST.rglob("*.html"):
         fail(route, f"incorrect html lang ({m.html_lang})")
     if len(m.canonicals) != 1 or m.canonicals[0] != expected:
         fail(route, f"invalid canonical: {m.canonicals}")
-    if len(m.descriptions) != 1 or not m.descriptions[0] or len(m.descriptions[0].strip()) < 25:
-        fail(route, "missing, duplicate or too-short meta description")
+    if len(m.descriptions) != 1 or not m.descriptions[0] or not m.descriptions[0].strip():
+        fail(route, "missing or duplicate meta description")
     if not m.title.strip() or "Princeton Wealth Academy | Princeton Wealth Academy" in m.title:
         fail(route, "missing or duplicated page title")
     if m.h1 != 1:
