@@ -1,15 +1,19 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
 
+const isChinese = Astro.url.pathname === '/zh' || Astro.url.pathname.startsWith('/zh/');
 const menuItems = [
-  { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about/' },
-  { label: 'Education', href: '/education/' },
-  { label: 'Insights', href: '/insights/' },
-  { label: 'Events', href: '/events/' },
-  { label: 'Resources', href: '/resources/' },
-  { label: 'Contact', href: '/contact/' },
-];
+  { en: 'Home', zh: '首页', href: '/' },
+  { en: 'About Us', zh: '关于我们', href: '/about/' },
+  { en: 'Education', zh: '财务教育', href: '/education/' },
+  { en: 'Insights', zh: '金融洞察', href: '/insights/' },
+  { en: 'Events', zh: '活动与讲座', href: '/events/' },
+  { en: 'Resources', zh: '学习资源', href: '/resources/' },
+  { en: 'Contact', zh: '联系我们', href: '/contact/' },
+].map((item) => ({
+  label: isChinese ? item.zh : item.en,
+  href: isChinese ? (item.href === '/' ? '/zh/' : `/zh${item.href}`) : item.href,
+}));
 
 const normalizePath = (path: string) =>
   path.replace(/\/+$/, '') || '/';
@@ -17,16 +21,17 @@ const normalizePath = (path: string) =>
 const currentPath = normalizePath(Astro.url.pathname);
 
 const isCurrent = (href: string) =>
-  normalizePath(href) === currentPath;
+  normalizePath(href) === currentPath ||
+  (normalizePath(href) !== '/' && currentPath.startsWith(`${normalizePath(href)}/`));
 ---
 
 <header class="site-header">
   <div class="brand">
-    <a href="/">Princeton Wealth Academy</a>
+    <a href={isChinese ? '/zh/' : '/'}>Princeton Wealth Academy</a>
   </div>
 
   <!-- Desktop navigation -->
-  <nav class="desktop-nav" aria-label="Main navigation">
+  <nav class="desktop-nav" aria-label={isChinese ? '主导航' : 'Main navigation'}>
     <ul class="nav-links">
       {menuItems.map((item) => (
         <li>
@@ -52,7 +57,7 @@ const isCurrent = (href: string) =>
       id="menu-button"
       class="menu-button"
       type="button"
-      aria-label="Open navigation menu"
+      aria-label={isChinese ? '打开导航菜单' : 'Open navigation menu'}
       aria-controls="mobile-menu"
       aria-expanded="false"
     >
@@ -65,22 +70,22 @@ const isCurrent = (href: string) =>
 <dialog
   id="mobile-menu"
   class="mobile-drawer"
-  aria-label="Mobile navigation menu"
+  aria-label={isChinese ? '移动导航菜单' : 'Mobile navigation menu'}
 >
   <div class="drawer-header">
-    <strong>Menu</strong>
+    <strong>{isChinese ? '菜单' : 'Menu'}</strong>
 
     <button
       id="close-button"
       class="close-button"
       type="button"
-      aria-label="Close navigation menu"
+      aria-label={isChinese ? '关闭导航菜单' : 'Close navigation menu'}
     >
       <span aria-hidden="true">×</span>
     </button>
   </div>
 
-  <nav aria-label="Mobile navigation">
+  <nav aria-label={isChinese ? '移动导航' : 'Mobile navigation'}>
     <ul class="mobile-links">
       {menuItems.map((item) => (
         <li>

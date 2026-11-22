@@ -6,15 +6,17 @@ import ArticleLayout from "../../../layouts/ArticleLayout.astro";
 export async function getStaticPaths() {
   const articles = await getCollection('insights');
 
-  return articles.map((article) => ({
-    params: { slug: article.id },
+  return articles
+    .filter((article) => article.id.startsWith('zh/'))
+    .map((article) => ({
+    params: { slug: article.id.slice('zh/'.length) },
     props: {
       article,
       related: articles
-        .filter((other) => article.data.relatedArticles.includes(other.id))
+        .filter((other) => other.id.startsWith('zh/') && article.data.relatedArticles.includes(other.id))
         .map((other) => ({
           title: other.data.title,
-          url: `/insights/${other.id}/`,
+          url: `/zh/insights/${other.id.slice('zh/'.length)}/`,
         })),
     },
   }));
@@ -25,6 +27,7 @@ const { Content } = await render(article);
 ---
 
 <ArticleLayout
+  lang="zh"
   title={article.data.title}
   description={article.data.description}
   category={article.data.category}

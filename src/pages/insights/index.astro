@@ -2,7 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const articles = (await getCollection('insights')).sort(
+const articles = (await getCollection('insights'))
+  .filter((article) => !article.id.startsWith('zh/'))
+  .sort(
   (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
 );
 
