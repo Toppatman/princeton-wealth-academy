@@ -5,13 +5,12 @@ interface Reference {
   title: string;
   url?: string;
 }
-
 interface RelatedArticle {
   title: string;
   url: string;
 }
-
 interface Props {
+  lang?: 'en' | 'zh';
   title: string;
   description: string;
   category: string;
@@ -23,29 +22,20 @@ interface Props {
 }
 
 const {
-  title,
-  description,
-  category,
-  author,
-  published,
-  updated,
-  references,
-  relatedArticles,
+  lang = 'en', title, description, category, author,
+  published, updated, references, relatedArticles,
 } = Astro.props;
-
-const formatDate = (date: Date) => new Intl.DateTimeFormat('en-US', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  timeZone: 'UTC',
+const zh = lang === 'zh';
+const prefix = zh ? '/zh' : '';
+const formatDate = (date: Date) => new Intl.DateTimeFormat(zh ? 'zh-CN' : 'en-US', {
+  year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
 }).format(date);
 const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
 ---
-
 <BaseLayout title={title} description={description}>
   <article class="insight-article">
-    <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="/insights/">Insights</a>
+    <nav class="breadcrumbs" aria-label={zh ? '面包屑导航' : 'Breadcrumb'}>
+      <a href={`${prefix}/insights/`}>{zh ? '金融洞察' : 'Insights'}</a>
       <span aria-hidden="true">/</span>
       <span>{category}</span>
     </nav>
@@ -55,9 +45,18 @@ const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
       <h1>{title}</h1>
       <p class="description">{description}</p>
       <div class="byline">
-        <p>By <a href="/about/sharon-deng/">{author}</a></p>
-        <p>Published: <time datetime={dateAttribute(published)}>{formatDate(published)}</time></p>
-        <p>Last updated: <time datetime={dateAttribute(updated)}>{formatDate(updated)}</time></p>
+        <p>
+          {zh ? '作者：' : 'By '}
+          <a href={`${prefix}/about/sharon-deng/`}>{author}</a>
+        </p>
+        <p>
+          {zh ? '发布日期：' : 'Published: '}
+          <time datetime={dateAttribute(published)}>{formatDate(published)}</time>
+        </p>
+        <p>
+          {zh ? '最后更新：' : 'Last updated: '}
+          <time datetime={dateAttribute(updated)}>{formatDate(updated)}</time>
+        </p>
       </div>
     </header>
 
@@ -65,26 +64,23 @@ const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
 
     <footer class="article-footer">
       <section aria-labelledby="references-heading">
-        <h2 id="references-heading">Sources / References</h2>
+        <h2 id="references-heading">{zh ? '资料来源与参考文献' : 'Sources / References'}</h2>
         {references.length > 0 ? (
           <ol>
             {references.map((reference) => (
               <li>
                 {reference.url ? (
                   <a href={reference.url} rel="noopener noreferrer">{reference.title}</a>
-                ) : (
-                  reference.title
-                )}
+                ) : reference.title}
               </li>
             ))}
           </ol>
         ) : (
-          <p>No sources have been added yet.</p>
+          <p>{zh ? '尚未添加参考资料。' : 'No sources have been added yet.'}</p>
         )}
       </section>
-
       <section aria-labelledby="related-heading">
-        <h2 id="related-heading">Related Articles</h2>
+        <h2 id="related-heading">{zh ? '相关文章' : 'Related Articles'}</h2>
         {relatedArticles.length > 0 ? (
           <ul>
             {relatedArticles.map((item) => (
@@ -92,7 +88,7 @@ const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
             ))}
           </ul>
         ) : (
-          <p>No related articles yet.</p>
+          <p>{zh ? '暂无相关文章。' : 'No related articles yet.'}</p>
         )}
       </section>
     </footer>
@@ -100,12 +96,7 @@ const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
 </BaseLayout>
 
 <style>
-  .insight-article {
-    width: min(100%, 780px);
-    margin: 0 auto;
-    padding: clamp(1rem, 3vw, 2rem) 0 3rem;
-    color: #23354a;
-  }
+  .insight-article { width: min(100%, 780px); margin: 0 auto; padding: clamp(1rem, 3vw, 2rem) 0 3rem; color: #23354a; }
   a { color: #174b80; text-underline-offset: 3px; }
   a:hover, a:focus-visible { color: #9a6a13; }
   .breadcrumbs { display: flex; gap: .6rem; align-items: center; color: #566779; font-size: .92rem; margin-bottom: 2rem; }

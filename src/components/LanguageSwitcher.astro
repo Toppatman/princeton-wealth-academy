@@ -1,15 +1,18 @@
 ---
-/** Global EN/中文 switcher. Uses section landing pages for untranslated deep links. */
+import { getCollection } from 'astro:content';
+
 interface Props {
   englishUrl?: string;
   chineseUrl?: string;
-  currentLanguage?: 'en' | 'zh'; // Backward compatibility with Phase 4 test pages
+  currentLanguage?: 'en' | 'zh';
 }
+
 const { englishUrl, chineseUrl } = Astro.props;
-const current = Astro.url.pathname;
-const isChinese = current === '/zh' || current.startsWith('/zh/');
-const englishPath = (current.replace(/^\/zh(?=\/|$)/, '') || '/');
-const normalize = (p: string) => p.replace(/\/+$/, '') || '/';
+const path = Astro.url.pathname;
+const isChinese = path === '/zh' || path.startsWith('/zh/');
+const normalized = (path.replace(/^\/zh(?=\/|$)/, '') || '/').replace(/\/+$/, '') || '/';
+
+// These pages have equivalent English and Chinese versions.
 const supported = new Set([
   '/', '/about', '/about/sharon-deng', '/education',
   '/insights', '/events', '/resources', '/contact',
@@ -17,20 +20,40 @@ const supported = new Set([
   '/education/tax-education', '/education/insurance-risk-management',
   '/education/long-term-care', '/education/estate-legacy-planning',
   '/education/college-funding',
+  '/resources/guides', '/resources/checklists', '/resources/faqs',
+  '/resources/videos', '/resources/workshop-materials',
 ]);
 
-const standardPath = normalize(englishPath);
-const translatedPage = supported.has(standardPath)
-  ? englishPath
-  : standardPath.startsWith('/insights/') ? '/insights/'
-  : standardPath.startsWith('/events/') ? '/events/'
-  : standardPath.startsWith('/education/') ? '/education/'
-  : standardPath.startsWith('/about/') ? '/about/'
-  : standardPath.startsWith('/resources/') ? '/resources/'
+const fallback = normalized.startsWith('/insights/') ? '/insights/'
+  : normalized.startsWith('/events/') ? '/events/'
+  : normalized.startsWith('/education/') ? '/education/'
+  : normalized.startsWith('/about/') ? '/about/'
+  : normalized.startsWith('/resources/') ? '/resources/'
   : '/';
+const translatedPage = supported.has(normalized) ? (normalized === '/' ? '/' : `${normalized}/`) : fallback;
 
-const enHref = englishUrl || (isChinese ? translatedPage : englishPath);
-const zhHref = chineseUrl || (translatedPage === '/' ? '/zh/' : `/zh${translatedPage}`);
+let enHref = translatedPage;
+let zhHref = translatedPage === '/' ? '/zh/' : `/zh${translatedPage}`;
+
+// Match deep links only if both corresponding content entries exist.
+if (normalized.startsWith('/insights/')) {
+  const slug = normalized.slice('/insights/'.length);
+  const entries = await getCollection('insights');
+  const englishExists = entries.some((entry) => entry.id === slug);
+  const chineseExists = entries.some((entry) => entry.id === `zh/${slug}`);
+  enHref = englishExists ? `/insights/${slug}/` : '/insights/';
+  zhHref = chineseExists ? `/zh/insights/${slug}/` : '/zh/insights/';
+} else if (normalized.startsWith('/events/')) {
+  const slug = normalized.slice('/events/'.length);
+  const entries = await getCollection('events');
+  const englishExists = entries.some((entry) => entry.id === `en/${slug}`);
+  const chineseExists = entries.some((entry) => entry.id === `zh/${slug}`);
+  enHref = englishExists ? `/events/${slug}/` : '/events/';
+  zhHref = chineseExists ? `/zh/events/${slug}/` : '/zh/events/';
+}
+
+enHref = englishUrl || enHref;
+zhHref = chineseUrl || zhHref;
 ---
 <nav class="language-switcher" aria-label={isChinese ? '选择语言' : 'Choose language'}>
   <a href={enHref} lang="en" aria-current={!isChinese ? 'page' : undefined}>English</a>
@@ -40,6 +63,6 @@ const zhHref = chineseUrl || (translatedPage === '/' ? '/zh/' : `/zh${translated
 <style>
   .language-switcher { display: inline-flex; align-items: center; gap: .5rem; white-space: nowrap; font-size: .9rem; }
   .language-switcher a { color: var(--navy, #0b2d5b); text-decoration: none; }
-  .language-switcher a:hover, .language-switcher a[aria-current="page"] { text-decoration: underline; text-underline-offset: .2rem; }
-  .language-switcher a[aria-current="page"] { font-weight: 700; }
+  .language-switcher a:hover, .language-switcher a[aria-current='page'] { text-decoration: underline; text-underline-offset: .2rem; }
+  .language-switcher a[aria-current='page'] { font-weight: 700; }
 </style>
