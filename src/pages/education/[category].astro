@@ -22,7 +22,10 @@ const { categoryData } = Astro.props as {
 };
 ---
 
-<Layout title={`${categoryData.title} | Princeton Wealth Academy`}>
+<Layout
+  title={categoryData.title}
+  description={categoryData.description}
+>
   <section class="category-page">
     <div class="education-container">
 

@@ -27,7 +27,9 @@ const { isHome } = seo;
     <title>{seo.pageTitle}</title>
   </head>
   <body class={isHome ? 'home-page' : undefined}>
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content">
+      {seo.language === 'zh-Hans' ? '跳至主要内容' : 'Skip to content'}
+    </a>
     <Header />
     <main id="main-content" class="site-main"><slot /></main>
     <Footer />

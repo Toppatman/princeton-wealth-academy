@@ -3,7 +3,7 @@ name: Phase 7 SEO audit
 on:
   pull_request:
   push:
-    branches: [phase-7-seo-steps-4-6]
+    branches: [phase-7-integration, main]
   workflow_dispatch:
 
 permissions:
