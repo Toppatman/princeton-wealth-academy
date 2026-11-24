@@ -1,10 +1,10 @@
 ---
-import { getCollection, render } from 'astro:content';
-import ArticleLayout from "../../../layouts/ArticleLayout.astro";
-
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ArticleLayout from '../../../layouts/ArticleLayout.astro';
 
 export async function getStaticPaths() {
   const articles = await getCollection('insights');
+<<<<<<< HEAD
 
   return articles
     .filter((article) => article.id.startsWith('zh/'))
@@ -20,12 +20,34 @@ export async function getStaticPaths() {
         })),
     },
   }));
+=======
+  return articles
+    .filter((article) => article.id.startsWith('zh/'))
+    .map((article) => ({
+      params: { slug: article.id.slice('zh/'.length) },
+      props: {
+        article,
+        related: articles
+          .filter((other) =>
+            other.id.startsWith('zh/') &&
+            article.data.relatedArticles.includes(other.id)
+          )
+          .map((other) => ({
+            title: other.data.title,
+            url: `/zh/insights/${other.id.slice('zh/'.length)}/`,
+          })),
+      },
+    }));
+>>>>>>> origin/phase-7-seo-steps-4-6
 }
 
+interface Props {
+  article: CollectionEntry<'insights'>;
+  related: { title: string; url: string }[];
+}
 const { article, related } = Astro.props;
 const { Content } = await render(article);
 ---
-
 <ArticleLayout
   lang="zh"
   title={article.data.title}

@@ -2,12 +2,14 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/style.css';
+import { getSeoMetadata } from '../lib/seo';
 
 interface Props {
   title: string;
   description?: string;
 }
 
+<<<<<<< HEAD
 const { title, description = 'Princeton Wealth Academy educational website.' } = Astro.props;
 const pageTitle = title === 'Home' ? 'Princeton Wealth Academy' : `${title} | Princeton Wealth Academy`;
 const isChinese = Astro.url.pathname === '/zh' || Astro.url.pathname.startsWith('/zh/');
@@ -19,11 +21,24 @@ const isHome =
 
 <!doctype html>
 <html lang={isChinese ? 'zh-Hans' : 'en'}>
+=======
+const { title, description } = Astro.props;
+const seo = await getSeoMetadata(Astro.url.pathname, title, description);
+const { isHome } = seo;
+---
+
+<!doctype html>
+<html lang={seo.language}>
+>>>>>>> origin/phase-7-seo-steps-4-6
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <title>{pageTitle}</title>
+    <meta name="description" content={seo.pageDescription} />
+    <meta name="robots" content={seo.noindex ? 'noindex, follow' : 'index, follow'} />
+    <link rel="canonical" href={seo.canonical} />
+    {seo.alternateEnglish && <link rel="alternate" hreflang="en" href={seo.alternateEnglish} />}
+    {seo.alternateChinese && <link rel="alternate" hreflang="zh-Hans" href={seo.alternateChinese} />}
+    <title>{seo.pageTitle}</title>
   </head>
   <body class={isHome ? 'home-page' : undefined}>
     <a class="skip-link" href="#main-content">{isChinese ? '跳至主要内容' : 'Skip to content'}</a>

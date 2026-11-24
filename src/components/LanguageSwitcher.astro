@@ -1,16 +1,17 @@
 ---
-import { getCollection } from 'astro:content';
 /** Global EN/中文 switcher. Uses section landing pages for untranslated deep links. */
 interface Props {
   englishUrl?: string;
   chineseUrl?: string;
-  currentLanguage?: 'en' | 'zh'; // Backward compatibility with Phase 4 test pages
+  currentLanguage?: 'en' | 'zh';
 }
+
 const { englishUrl, chineseUrl } = Astro.props;
-const current = Astro.url.pathname;
-const isChinese = current === '/zh' || current.startsWith('/zh/');
-const englishPath = (current.replace(/^\/zh(?=\/|$)/, '') || '/');
-const normalize = (p: string) => p.replace(/\/+$/, '') || '/';
+const path = Astro.url.pathname;
+const isChinese = path === '/zh' || path.startsWith('/zh/');
+const normalized = (path.replace(/^\/zh(?=\/|$)/, '') || '/').replace(/\/+$/, '') || '/';
+
+// These pages have equivalent English and Chinese versions.
 const supported = new Set([
   '/', '/about', '/about/sharon-deng', '/education',
   '/insights', '/events', '/resources', '/contact',
@@ -18,8 +19,6 @@ const supported = new Set([
   '/education/tax-education', '/education/insurance-risk-management',
   '/education/long-term-care', '/education/estate-legacy-planning',
   '/education/college-funding',
-  '/resources/guides', '/resources/checklists',
-  '/resources/faqs', '/resources/videos', '/resources/workshop-materials',
 ]);
 
 const standardPath = normalize(englishPath);
@@ -32,25 +31,8 @@ const translatedPage = supported.has(standardPath)
   : standardPath.startsWith('/resources/') ? '/resources/'
   : '/';
 
-let enHref = translatedPage;
-let zhHref = translatedPage === '/' ? '/zh/' : `/zh${translatedPage}`;
-if (standardPath.startsWith('/insights/')) {
-  const slug = standardPath.slice('/insights/'.length);
-  const entries = await getCollection('insights');
-  enHref = entries.some((entry) => entry.id === slug)
-    ? `/insights/${slug}/` : '/insights/';
-  zhHref = entries.some((entry) => entry.id === `zh/${slug}`)
-    ? `/zh/insights/${slug}/` : '/zh/insights/';
-} else if (standardPath.startsWith('/events/')) {
-  const slug = standardPath.slice('/events/'.length);
-  const entries = await getCollection('events');
-  enHref = entries.some((entry) => entry.id === `en/${slug}`)
-    ? `/events/${slug}/` : '/events/';
-  zhHref = entries.some((entry) => entry.id === `zh/${slug}`)
-    ? `/zh/events/${slug}/` : '/zh/events/';
-}
-enHref = englishUrl || enHref;
-zhHref = chineseUrl || zhHref;
+const enHref = englishUrl || (isChinese ? translatedPage : englishPath);
+const zhHref = chineseUrl || (translatedPage === '/' ? '/zh/' : `/zh${translatedPage}`);
 ---
 <nav class="language-switcher" aria-label={isChinese ? '选择语言' : 'Choose language'}>
   <a href={enHref} lang="en" aria-current={!isChinese ? 'page' : undefined}>English</a>
@@ -60,6 +42,6 @@ zhHref = chineseUrl || zhHref;
 <style>
   .language-switcher { display: inline-flex; align-items: center; gap: .5rem; white-space: nowrap; font-size: .9rem; }
   .language-switcher a { color: var(--navy, #0b2d5b); text-decoration: none; }
-  .language-switcher a:hover, .language-switcher a[aria-current="page"] { text-decoration: underline; text-underline-offset: .2rem; }
-  .language-switcher a[aria-current="page"] { font-weight: 700; }
+  .language-switcher a:hover, .language-switcher a[aria-current='page'] { text-decoration: underline; text-underline-offset: .2rem; }
+  .language-switcher a[aria-current='page'] { font-weight: 700; }
 </style>

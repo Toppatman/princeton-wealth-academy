@@ -1,7 +1,9 @@
 ---
 import LanguageSwitcher from './LanguageSwitcher.astro';
 
-const isChinese = Astro.url.pathname === '/zh' || Astro.url.pathname.startsWith('/zh/');
+const path = Astro.url.pathname;
+const isChinese = path === '/zh' || path.startsWith('/zh/');
+
 const menuItems = [
   { en: 'Home', zh: '首页', href: '/' },
   { en: 'About Us', zh: '关于我们', href: '/about/' },
@@ -15,30 +17,22 @@ const menuItems = [
   href: isChinese ? (item.href === '/' ? '/zh/' : `/zh${item.href}`) : item.href,
 }));
 
-const normalizePath = (path: string) =>
-  path.replace(/\/+$/, '') || '/';
-
-const currentPath = normalizePath(Astro.url.pathname);
-
+const normalizePath = (value: string) => value.replace(/\/+$/, '') || '/';
+const currentPath = normalizePath(path);
 const isCurrent = (href: string) =>
-  normalizePath(href) === currentPath ||
-  (normalizePath(href) !== '/' && currentPath.startsWith(`${normalizePath(href)}/`));
+  normalizePath(href) === currentPath;
 ---
-
 <header class="site-header">
   <div class="brand">
     <a href={isChinese ? '/zh/' : '/'}>Princeton Wealth Academy</a>
   </div>
 
   <!-- Desktop navigation -->
-  <nav class="desktop-nav" aria-label={isChinese ? '主导航' : 'Main navigation'}>
+  <nav class="desktop-nav" aria-label="Main navigation">
     <ul class="nav-links">
       {menuItems.map((item) => (
         <li>
-          <a
-            href={item.href}
-            aria-current={isCurrent(item.href) ? 'page' : undefined}
-          >
+          <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
             {item.label}
           </a>
         </li>
@@ -46,13 +40,8 @@ const isCurrent = (href: string) =>
     </ul>
   </nav>
 
-  <!-- Language switcher stays outside the mobile drawer -->
   <div class="header-actions">
-    <div class="header-language-switcher">
-      <LanguageSwitcher />
-    </div>
-
-    <!-- Mobile hamburger button -->
+    <div class="header-language-switcher"><LanguageSwitcher /></div>
     <button
       id="menu-button"
       class="menu-button"
@@ -66,14 +55,13 @@ const isCurrent = (href: string) =>
   </div>
 </header>
 
-<!-- Mobile slide-out sidebar -->
 <dialog
   id="mobile-menu"
   class="mobile-drawer"
   aria-label={isChinese ? '移动导航菜单' : 'Mobile navigation menu'}
 >
   <div class="drawer-header">
-    <strong>{isChinese ? '菜单' : 'Menu'}</strong>
+    <strong>Menu</strong>
 
     <button
       id="close-button"
@@ -85,14 +73,11 @@ const isCurrent = (href: string) =>
     </button>
   </div>
 
-  <nav aria-label={isChinese ? '移动导航' : 'Mobile navigation'}>
+  <nav aria-label="Mobile navigation">
     <ul class="mobile-links">
       {menuItems.map((item) => (
         <li>
-          <a
-            href={item.href}
-            aria-current={isCurrent(item.href) ? 'page' : undefined}
-          >
+          <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
             {item.label}
           </a>
         </li>
@@ -102,17 +87,9 @@ const isCurrent = (href: string) =>
 </dialog>
 
 <script>
-  const menu = document.querySelector<HTMLDialogElement>(
-    '#mobile-menu'
-  );
-
-  const menuButton = document.querySelector<HTMLButtonElement>(
-    '#menu-button'
-  );
-
-  const closeButton = document.querySelector<HTMLButtonElement>(
-    '#close-button'
-  );
+  const menu = document.querySelector<HTMLDialogElement>('#mobile-menu');
+  const menuButton = document.querySelector<HTMLButtonElement>('#menu-button');
+  const closeButton = document.querySelector<HTMLButtonElement>('#close-button');
 
   menuButton?.addEventListener('click', () => {
     menu?.showModal();
@@ -120,214 +97,42 @@ const isCurrent = (href: string) =>
     document.body.classList.add('mobile-nav-open');
   });
 
-  closeButton?.addEventListener('click', () => {
-    menu?.close();
-  });
-
+  closeButton?.addEventListener('click', () => menu?.close());
   menu?.addEventListener('close', () => {
     menuButton?.setAttribute('aria-expanded', 'false');
     document.body.classList.remove('mobile-nav-open');
   });
-
-  // Close when clicking outside the sidebar.
   menu?.addEventListener('click', (event) => {
-    if (event.target === menu) {
-      menu.close();
-    }
+    if (event.target === menu) menu.close();
   });
 </script>
 
 <style>
-  .site-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid #d9dfe5;
-    background: var(--warm-white);
-  }
-
-  .brand {
-    font-size: 1.2rem;
-    font-weight: 700;
-    line-height: 1.3;
-  }
-
-  .brand a {
-    color: var(--navy);
-    text-decoration: none;
-  }
-
-  /* Desktop navigation */
-
-  .nav-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .nav-links a {
-    color: var(--navy);
-    text-decoration: none;
-  }
-
-  .nav-links a:hover,
-  .nav-links a[aria-current='page'] {
-    text-decoration: underline;
-    text-underline-offset: 0.3rem;
-  }
-
-  /* Hamburger button */
-
-  .menu-button {
-    display: none;
-    flex-shrink: 0;
-    background: transparent;
-    border: none;
-    color: var(--navy);
-    font-size: 1.8rem;
-    cursor: pointer;
-    padding: 0.35rem 0.6rem;
-  }
-
-  /* Mobile sidebar */
-
-  .mobile-drawer {
-    position: fixed;
-    inset: 0 0 0 auto;
-    margin: 0;
-    width: min(320px, 85vw);
-    height: 100dvh;
-    max-width: none;
-    max-height: none;
-    padding: 1.5rem;
-    border: none;
-    background: var(--warm-white);
-    color: var(--navy);
-    box-shadow: -8px 0 30px rgb(0 0 0 / 15%);
-  }
-
-  .mobile-drawer::backdrop {
-    background: rgb(0 0 0 / 50%);
-  }
-
-  .drawer-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #d9dfe5;
-  }
-
-  .close-button {
-    background: transparent;
-    border: none;
-    color: var(--navy);
-    font-size: 2rem;
-    cursor: pointer;
-  }
-
-  .mobile-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    list-style: none;
-    margin: 1.5rem 0 0;
-    padding: 0;
-  }
-
-  .mobile-links a {
-    display: block;
-    padding: 0.75rem;
-    color: var(--navy);
-    text-decoration: none;
-    border-radius: 6px;
-  }
-
-  .mobile-links a:hover {
-    background: var(--light-blue);
-  }
-
-  .mobile-links a[aria-current='page'] {
-    border-left: 3px solid var(--gold);
-    background: var(--light-blue);
-    font-weight: 700;
-  }
-
-  .menu-button:focus-visible,
-  .close-button:focus-visible,
-  .nav-links a:focus-visible,
-  .mobile-links a:focus-visible,
-  .brand a:focus-visible {
-    outline: 2px solid var(--gold);
-    outline-offset: 3px;
-  }
-
-  :global(body.mobile-nav-open) {
-    overflow: hidden;
-  }
-
-  /* Switch to mobile navigation */
-
-  @media (max-width: 950px) {
-    .desktop-nav {
-      display: none;
-    }
-
-    .menu-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-
-  @media (max-width: 380px) {
-    .brand {
-      font-size: 1rem;
-    }
-  }
-
-  /* Language selection is always separate from the mobile drawer. */
-  .header-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-left: auto;
-    flex-shrink: 0;
-  }
-
-  .header-language-switcher {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  .header-language-switcher :global(.language-switcher) {
-    white-space: nowrap;
-  }
-
+  .site-header { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; padding: 1rem 1.25rem; border-bottom: 1px solid #d9dfe5; background: var(--warm-white); }
+  .brand { font-size: 1.2rem; font-weight: 700; line-height: 1.3; }
+  .brand a { color: var(--navy); text-decoration: none; }
+  .nav-links { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin: 0; padding: 0; list-style: none; }
+  .nav-links a { color: var(--navy); text-decoration: none; }
+  .nav-links a:hover, .nav-links a[aria-current='page'] { text-decoration: underline; text-underline-offset: .3rem; }
+  .header-actions { display: flex; align-items: center; gap: 12px; margin-left: auto; flex-shrink: 0; }
+  .header-language-switcher { display: flex; align-items: center; flex-shrink: 0; }
+  .header-language-switcher :global(.language-switcher) { white-space: nowrap; }
+  .menu-button { display: none; flex-shrink: 0; background: transparent; border: none; color: var(--navy); font-size: 1.8rem; cursor: pointer; padding: .35rem .6rem; }
+  .mobile-drawer { position: fixed; inset: 0 0 0 auto; margin: 0; width: min(320px, 85vw); height: 100dvh; max-width: none; max-height: none; padding: 1.5rem; border: none; background: var(--warm-white); color: var(--navy); box-shadow: -8px 0 30px rgb(0 0 0 / 15%); }
+  .mobile-drawer::backdrop { background: rgb(0 0 0 / 50%); }
+  .drawer-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 1rem; border-bottom: 1px solid #d9dfe5; }
+  .close-button { background: transparent; border: none; color: var(--navy); font-size: 2rem; cursor: pointer; }
+  .mobile-links { display: flex; flex-direction: column; gap: .25rem; list-style: none; margin: 1.5rem 0 0; padding: 0; }
+  .mobile-links a { display: block; padding: .75rem; color: var(--navy); text-decoration: none; border-radius: 6px; }
+  .mobile-links a:hover { background: var(--light-blue); }
+  .mobile-links a[aria-current='page'] { border-left: 3px solid var(--gold); background: var(--light-blue); font-weight: 700; }
+  .menu-button:focus-visible, .close-button:focus-visible, .nav-links a:focus-visible, .mobile-links a:focus-visible, .brand a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  :global(body.mobile-nav-open) { overflow: hidden; }
+  @media (max-width: 950px) { .desktop-nav { display: none; } .menu-button { display: inline-flex; align-items: center; justify-content: center; } }
   @media (max-width: 480px) {
-    .site-header {
-      gap: 0.5rem;
-      padding: 0.75rem;
-    }
-
-    .brand {
-      min-width: 0;
-      font-size: 0.95rem;
-    }
-
-    .header-actions {
-      gap: 0.35rem;
-    }
-
-    .header-language-switcher :global(.language-switcher) {
-      gap: 0.3rem;
-      font-size: 0.8rem;
-    }
+    .site-header { gap: .5rem; padding: .75rem; }
+    .brand { min-width: 0; font-size: .95rem; }
+    .header-actions { gap: .35rem; }
+    .header-language-switcher :global(.language-switcher) { gap: .3rem; font-size: .8rem; }
   }
 </style>

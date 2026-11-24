@@ -5,12 +5,10 @@ interface Reference {
   title: string;
   url?: string;
 }
-
 interface RelatedArticle {
   title: string;
   url: string;
 }
-
 interface Props {
   lang?: 'en' | 'zh';
   title: string;
@@ -24,6 +22,7 @@ interface Props {
 }
 
 const {
+<<<<<<< HEAD
   lang = 'en',
   title,
   description,
@@ -42,10 +41,18 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat(zh ? 'zh-CN' : 'en-US
   month: 'long',
   day: 'numeric',
   timeZone: 'UTC',
+=======
+  lang = 'en', title, description, category, author,
+  published, updated, references, relatedArticles,
+} = Astro.props;
+const zh = lang === 'zh';
+const prefix = zh ? '/zh' : '';
+const formatDate = (date: Date) => new Intl.DateTimeFormat(zh ? 'zh-CN' : 'en-US', {
+  year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
+>>>>>>> origin/phase-7-seo-steps-4-6
 }).format(date);
 const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
 ---
-
 <BaseLayout title={title} description={description}>
   <article class="insight-article">
     <nav class="breadcrumbs" aria-label={zh ? '面包屑导航' : 'Breadcrumb'}>
@@ -59,9 +66,24 @@ const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
       <h1>{title}</h1>
       <p class="description">{description}</p>
       <div class="byline">
+<<<<<<< HEAD
         <p>{zh ? '作者：' : 'By '}<a href={`${prefix}/about/sharon-deng/`}>{author}</a></p>
         <p>{zh ? '发布日期：' : 'Published: '}<time datetime={dateAttribute(published)}>{formatDate(published)}</time></p>
         <p>{zh ? '最后更新：' : 'Last updated: '}<time datetime={dateAttribute(updated)}>{formatDate(updated)}</time></p>
+=======
+        <p>
+          {zh ? '作者：' : 'By '}
+          <a href={`${prefix}/about/sharon-deng/`}>{author}</a>
+        </p>
+        <p>
+          {zh ? '发布日期：' : 'Published: '}
+          <time datetime={dateAttribute(published)}>{formatDate(published)}</time>
+        </p>
+        <p>
+          {zh ? '最后更新：' : 'Last updated: '}
+          <time datetime={dateAttribute(updated)}>{formatDate(updated)}</time>
+        </p>
+>>>>>>> origin/phase-7-seo-steps-4-6
       </div>
     </header>
 
@@ -76,9 +98,7 @@ const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
               <li>
                 {reference.url ? (
                   <a href={reference.url} rel="noopener noreferrer">{reference.title}</a>
-                ) : (
-                  reference.title
-                )}
+                ) : reference.title}
               </li>
             ))}
           </ol>
@@ -86,7 +106,6 @@ const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
           <p>{zh ? '尚未添加参考资料。' : 'No sources have been added yet.'}</p>
         )}
       </section>
-
       <section aria-labelledby="related-heading">
         <h2 id="related-heading">{zh ? '相关文章' : 'Related Articles'}</h2>
         {relatedArticles.length > 0 ? (
@@ -104,12 +123,7 @@ const dateAttribute = (date: Date) => date.toISOString().slice(0, 10);
 </BaseLayout>
 
 <style>
-  .insight-article {
-    width: min(100%, 780px);
-    margin: 0 auto;
-    padding: clamp(1rem, 3vw, 2rem) 0 3rem;
-    color: #23354a;
-  }
+  .insight-article { width: min(100%, 780px); margin: 0 auto; padding: clamp(1rem, 3vw, 2rem) 0 3rem; color: #23354a; }
   a { color: #174b80; text-underline-offset: 3px; }
   a:hover, a:focus-visible { color: #9a6a13; }
   .breadcrumbs { display: flex; gap: .6rem; align-items: center; color: #566779; font-size: .92rem; margin-bottom: 2rem; }
